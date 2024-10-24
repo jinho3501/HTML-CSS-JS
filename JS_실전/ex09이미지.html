@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>뚱인데요~</h1>
+    <img id="main_img" src="./img.jpg" >
+    <button id="btn">이미지 변경</button>
+    <script>
+        const img1 = ()=>{
+            // document.getElementById("main_img").src = 'https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMjEyMTNfMTQw%2FMDAxNjcwOTI0MTUzMzI2.gQoaVZ8oajmPLJd6yCKyX_Re8h6zDmrcZSocFypuC24g.pP47RDjIgl6poLNtEbWrnI48FvGNp9Xa6N3CAKXKZgsg.JPEG.hansil1026%2Fefe5f7ed6102ff9f4663b0e1229aa7c2.jpg&type=sc960_832'
+            // 태그를 수집할때 선택자를 유동성있게 활용할려면 queryselector
+            // 반환하는 데이터가 1개만 반환한다 -> 데이터가 여러개인 경우라면 첫번째 데이터를 반환
+            // 수집하고자 하는 데이터가 여러개라면 -> querySelectorAll -> 리턴 데이터가 복수(배열)
+            document.querySelector("img").src = 'https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMjEyMTNfMTQw%2FMDAxNjcwOTI0MTUzMzI2.gQoaVZ8oajmPLJd6yCKyX_Re8h6zDmrcZSocFypuC24g.pP47RDjIgl6poLNtEbWrnI48FvGNp9Xa6N3CAKXKZgsg.JPEG.hansil1026%2Fefe5f7ed6102ff9f4663b0e1229aa7c2.jpg&type=sc960_832'
+            
+            }
+        
+        document.getElementById("btn").addEventListener("click",img1)
+    </script>
+</body>
+</html>

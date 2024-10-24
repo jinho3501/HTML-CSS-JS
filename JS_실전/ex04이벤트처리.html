@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button onclik="text()">버튼 1번</button>
+    <button id="btn">버튼 2번</button>
+    <button id="btn2">버튼 3번</button>
+
+    <script>
+        // JS에서 이벤트를 처리하는 방법
+        const text = ()=>{
+            alert("텍스트 출력");
+        }
+        // 1) 함수를 태그와 직접 연결하는 방법 -> 인라인 방식
+        // 태그안에 onclick과 같은 속성으로 이벤트를 연결
+
+        // 2) 함수와 태그의 연결을 모두 JS안에서 처리하는 방법 -> 이벤트 리스너
+        // - 이벤트를 붙여줄 요소를 수집하고, 이벤트를 연결
+        // - addEventLitener("이벤트종류","실행할함수")
+        // * 주의점 코드가 왼쪽에서 오른쪽으로 실행되기 때문에, 함수를 넣을때 ()들어가면 무조건 실행
+        // * 함수를 연결할때는 함수 이름만 작성할것 
+        document.getElementById("btn").addEventListener("click",text)
+
+        // 3) 함수와 태그를 연결 -> 함수를 직접 바로 생성 
+        // * 함수의 이름을 작성하지 않는다 -> 익명함수
+        // * 오직 해당 태그에게만 붙여줄 함수를 작성 활용 
+        // * 함수를 메모리에 저장하지 않기 때문에, 메모리관리 효율적이다 -> 코드가 짧아진다!
+        document.getElementById("btn2").addEventListener("click",()=>{alert("익명함수")})
+    </script>
+</body>
+</html>

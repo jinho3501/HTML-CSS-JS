@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    
+</head>
+<body>
+    <script>
+        // 자바 스크립트를 선언하는 3가지 방식
+        // 1. 내부방식 : HTML코드안에 직접 작성하는 방식 -> <script>태그를 활용
+        // - 장점 : HTML과 JS가 한 파일안에 존재하기 때문에 빠르게 코딩이 가능(로컬개발)
+        // - 단점 : 코드 노출/ 재사용성 떨어짐
+        // 2. 인라인방식 : HTML태그 안에 직접 작성하는 방식
+        // - 언제? 내장함수같은 간단한 로직을 처리할때 사용
+
+        // 3.외부방식 : JS파일을 분리해서 사용 할때 활용된다.
+        // - <script src="파일">
+        // - head, body 둘다 호출 가능
+        // - head -> 외부에서 불러온 API등을 활용할때
+        // - body -> 내가 직접 작성한 JS파일은 body태그 맨 끝에 써주기 -> 모든 태그를 생성 후 동작하기 위해서 
+        // - 파일을 불러 드릴 때, 태그 안쪽에 코드 작성하지 않기
+    </script>
+    <button style="color: red" onclick="alert('버튼 기능 실행')">버튼클릭</button> <br>
+    <button style="background-color: pink;" onclick="minus()">마이너스함수</button>
+    <script src="index.js"></script>
+</body>
+</html>

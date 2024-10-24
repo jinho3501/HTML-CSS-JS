@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>클릭 할 때 마다 태그 누적해서 생성하기</h1>
+    <button id="btn1">h1태그 생성</button>
+    <button id="btn2">a태그 생성</button>
+    <button id="btn3">ul태그 생성</button>
+    <div id="content"></div>
+    <script>
+        let doc = document.getElementById("content");
+        document.getElementById("btn1").addEventListener("click",()=>{
+            doc.innerHTML += "<h1>하위~~</h1>"
+        })
+        document.getElementById("btn2").addEventListener("click",()=>{
+            doc.innerHTML += '<a href="https://www.naver.com/">네이버</a><br>'
+        })
+        document.getElementById("btn3").addEventListener("click",()=>{
+            doc.innerHTML += `
+            <ul>
+                <li>html</li>
+                <li>css</li>
+                <li>js</li>
+            </ul>`
+        })
+    </script>
+</body>
+</html>

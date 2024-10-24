@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Form 태그</h1>
+    <ul>
+        <li>form 태그는 입력 양식 태그</li>
+        <li>사용자에게 데이터를 입력받아서 전송할때 사용하는 태그</li>
+        <li>필수 조건 : action, name, submit</li>
+        <ol>
+            <li>action : 데이터를 전송할 위치</li>
+            <li>name : 데이터의 이름</li>
+            <li>submit : 데이터를 보낼 시점</li>
+        </ol>
+    </ul>
+    <hr>
+    <form action="데이터를 보낼 위치" method="post">
+        <!-- placeholder : 미리보기 속성 
+             value : 기본값 속성     
+             type = "password"는 비밀번호 처럼 입력  
+             method = get , post  
+             get -> 데이터를 url에 동반해서 보내는 경우/ DB에 영향을 주지 않을때 (select)
+             post -> 데이터를 buffer형태로 숨겨서 보내는 경우/ DB에 영향을 줄때  
+        -->
+        아이디 : <input type="text" name="id" placeholder="아이디를 입력하세요"> <br>
+        이름 : <input type="text" name="name"placeholder="이름을 입력하세요"> <br>
+        비밀번호 : <input type="password" name="pw"placeholder="비밀번호를 입력하세요">
+        <hr>
+        통신사 선택
+        <select name="telecom">
+            <!-- value값이 없으면 option 태그의 content값이 전송(SKT)
+                 value값이 이씅면 value의 값이 속성값이 전송(skt)-->
+            <option value="">SKT</option>
+            <option value="">KT</option>
+            <option value="">LGU+</option>
+        </select>
+        <hr>
+        개인정보수집 동의 (체크박스 - 여러개의 선택가능) <br>
+        <input type="checkbox"name="agree"> 개인정보 수집
+        <input type="checkbox"name="agree"> 광고성  SMS 수신 동의 <br>
+        <input type="checkbox"name="agree"> 위치기반서비스 이용 동의
+        <hr>
+
+        성별선택 (라디오  하나만 선택가능) <br>
+        <input type="radio" name="gendear" value="M"> 남자
+        <input type="radio"name="gender"Femae="F"> 여자
+
+        <hr>
+        파일 첨부<input type="file"name="file">
+        <hr>
+        퍼스널컬러 선택<input type="color" name="pc">
+        <hr>
+        날짜,시간선택 <input type="datetime-local" name="meeting">
+        <hr>
+        날짜선택 <input type="date" name="birthday">
+        <hr>
+        게시글 작성 <br>
+        <textarea name=""cols='40'rows="5" id=""></textarea>
+        <hr>
+        <input type="submit"value="회원가입">
+        <!--
+            주의점!
+            form태그 안에서 button를 생성하면 기본값이 submit기능을 호출
+            - 순수하게 버튼의 기능을 사용하고 싶다면, type - button을 넣어주자
+            - 디자인적으로 버튼 디자인이 더 다양해서 보통 botton을 사용한다!
+        -->
+        <button>보내기버튼</button>
+        <input type="reset" value="초기화">
+    </form>
+</body>
+</html>

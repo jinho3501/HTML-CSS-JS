@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1 id="txt"><span>월 21일 오전수업!</span></h1>
+    <h1 id="txt2">변경할 텍스트</h1>
+    <script>
+        // 요소 안에 컨텐츠 수집
+        // 요소를 들고와서 안에있는 글자를 보여줘 
+        // innerHTML vs innerText
+        // 차이점 : 태그의 인식여부
+        let innerHTML = document.getElementById("txt").innerHTML
+        let innerText = document.getElementById("txt").innerText
+        console.log("html : ",innerHTML)
+        console.log("text : ",innerText)
+        
+        // 요소안에 컨텐츠를 변경하는 방법!
+        // 1) 요소를 수집 + innerText, innerHTML(컨텐츠 수집)
+        // 2) 변경할 때는 = 를 통해서 새로운 값을 대입
+        // * 태그를 포함하고 싶다면 반드시 innerHTML을 활용
+        // * 수집할때는 보통 innerText / 변경할때는 보통 innerHTML
+        document.getElementById("txt2").innerHTML = "<span>새로운 텍스트</span>"
+    </script>
+</body>
+</html>

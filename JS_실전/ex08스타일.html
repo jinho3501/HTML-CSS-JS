@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <span id="text">스타일 제어</span>
+    <button id="btn">스타일 변경</button>
+
+    <script>
+        const change=()=>{
+            document.getElementById("text").style.color = "red";
+            document.getElementById("text").style.fontSize = "50px";
+            // 속성을 여러개를 묶어서 사용이 가능
+            // * 단점 : 특정 태그에게만 적용이 가능, 코드 노출, 코드가 길어짐
+            // * class를 변경하난 기법을 css 조작
+            document.getElementById.style.cssText = "color : red; font-size : 100px"
+        }
+        document.getElementById("btn").addEventListener("click",change);
+    </script>
+</body>
+</html>

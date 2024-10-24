@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="jquery-3.7.1.min.js"></script>
+</head>
+<body>
+    <span id="txt">제이쿼리로 이벤트 처리</span>
+    <script>
+        $("#txt").on("mouseover",()=>{
+            $("#txt").css("color","red");
+        })
+        $("#txt").on("mouseout",()=>{
+            $("#txt").css("color","black");
+        })
+    </script>
+</body>
+</html>

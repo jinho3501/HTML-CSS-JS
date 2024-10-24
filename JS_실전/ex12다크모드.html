@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="jquery-3.7.1.min.js"></script>
+    <style>
+        .normal{
+            background-color: white;
+            color: black;
+        }
+        .dark{
+            background-color: black;
+            color: white;
+        }
+    </style>
+</head>
+<body class="normal">
+    <h1>텍스트</h1>
+    <button id="btn">다크모드 변경</button>
+    <button id="btn1">노말 변경</button>
+    <script>
+        $("#btn").on("click",()=>{
+            if ($("body").hasClass("normal")){
+                $("body").removeClass("normal");
+                $("body").addClass("dark");
+            }else {
+                ($("body").hasClass("dark"))
+                $("body").removeClass("dark");
+                $("body").addClass("normal");
+            }
+            
+        })
+        $("#btn1").on("click",()=>{
+            if ($("body").hasClass("dark")){
+                $("body").removeClass("dark");
+                $("body").addClass("normal");
+            }
+        })
+        // class를 변경할때 사용하는 함수 3가지
+        // 1. class의 유무 -> hasClass -> boolean -> 조건문
+        // 2. class를 삭제 -> removeClass
+        // 3. class를 추가 -> addClass
+        // * class를 변경하는 이유 -> 다양한 스타일을 직접 제어하지 않고 , css로 작성된 디자인으로 바꿔서 사용 
+        // * clsss는 복수개를 가질수 있기 떄문에 반드시 지워줘야한다. 
+    </script>
+</body>
+</html>

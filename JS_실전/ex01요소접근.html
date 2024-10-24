@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <p id="txt">텍스트를 수집해주세요!</p>
+    <span class="txt2">복수 데이터</span>
+    <span class="txt2">복수 데이터</span>
+    <script>
+        // 특정 요소에 접근하는 방법
+        // 문서에서 id가 txt인 요소를 가져와줘
+        // 1) 단일 요소에 접근하는 경우에는 리턴하는 데이터도 한개만 넘어온다(HTMLElement)
+        let p  = document.getElementById("txt");
+        console.log("수집한 요소 : ",p);
+        // 문서에서 class가 txt2인 요소들을 가져와줘
+        // 2) 복수요소에 접근하는 경우에는 리턴하는 데이터가 배열 형태로 넘어온다(HTMLCollection)
+        // * 주의점 : 배열처럼 인덱스와 길이는 존재하지만 배열함수는 사용할수 없다 -> 유사배열
+        // * 배열함수를 사용하고 싶다면 형변환  
+        let span = document.getElementsByClassName("txt2");
+        console.log("수집한 요소들 : ",span)
+    </script>
+</body>
+</html>

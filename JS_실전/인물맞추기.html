@@ -1,0 +1,289 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>인물 맞추기 게임</title>
+    <script src="jquery-3.7.1.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            background-color: #007bff;
+            color: #fff;
+            padding: 15px 0;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        img {
+            border-radius: 8px;
+            max-width: 100%;
+            height: auto;
+        }
+
+        input[type="text"] {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        p {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        #result {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        #score {
+            color: #007bff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>인물 맞추기 게임</h1>
+        <p>점수: <span id="score">0</span></p>
+        <p>남은 기회: <span id="attempts">30</span></p>
+        <img id="image" src="https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMTA5MjdfMjE4%2FMDAxNjMyNzEwNTY0NTg3.5mQmS8HOSdXA5TgNX6bBWp4dm6hgFJeKTFFyuJegUl8g.6BxLw2GY756PyHyxuf5Dz5XQUG7BSaIPXXbo83pNGg8g.JPEG.hoooooy%2FIMG_8860.JPG&type=a340" alt="Guess Who">
+        <br>
+        <input type="text" id="guess" placeholder="이름을 입력하세요">
+        <button id="btn">정답</button>
+        <p id="result"></p>
+    </div>
+
+    <script>
+        // 이미지 배열 및 정답 설정
+        const images = [
+            { src: "https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMTA5MjdfMjE4%2FMDAxNjMyNzEwNTY0NTg3.5mQmS8HOSdXA5TgNX6bBWp4dm6hgFJeKTFFyuJegUl8g.6BxLw2GY756PyHyxuf5Dz5XQUG7BSaIPXXbo83pNGg8g.JPEG.hoooooy%2FIMG_8860.JPG&type=a340", answer:"켄달 제너" },
+            { src: "https://search.pstatic.net/common/?src=http%3A%2F%2Fcafefiles.naver.net%2FMjAxODEwMTdfMTUw%2FMDAxNTM5NzM3MjQwMzI2.PDSjJzAGXEDqjboxKGrtxBNXa-7v9WxrNWCXT9EInEcg.2uTPH7DK2DzwmjZ8cQ0Kn4ey1gKnyNCuGdF8LKUzMi4g.JPEG.dmstnr4434%2FScreenshot_20181017-094426_NAVER.jpg&type=a340", answer: "스티븐 잡스" },
+            { src: "https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMDEyMTJfMjI2%2FMDAxNjA3NzA1Mjc0MzAz.zGowscyBBLi2U3htQ4ATp2Uv7xVQ4P0TXuPiwIQE5Kog.Oj3blJY2EvXQ-NOM4VzdGxZ-YfDEpFH2GyFXOVkQPeIg.PNG.qwer051028%2Fimage.png&type=a340", answer: "세종대왕" },
+            {src:"./JJang.jpg",answer:"주진완"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAxNzAzMDNfMjAy%2FMDAxNDg4NTEzODU2NjE1.LglLvoF-Sh9aYHO-nbbLLnm6bDMSWclIfCJ6fm3_AUQg.SxmJGZfZRCuCwFgrpMWEiwt8oRKt63W8Pp2pG8VE2b0g.JPEG.noranbi98%2Fkk.jpg&type=a340",answer : "김구"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fimgnews.naver.net%2Fimage%2F5486%2F2021%2F09%2F28%2F0000186465_004_20210928083650569.jpg&type=a340",answer : "유관순"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fimgnews.naver.net%2Fimage%2F5339%2F2023%2F11%2F19%2F0000277414_005_20231119110202193.jpg&type=a340",answer : "카리나"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyNDA3MTlfODcg%2FMDAxNzIxMzU1Njg3ODQx.uegRaPxbtEDcYmmEdGH4ttCFk4-U8UtBwGFArha1nqAg.lq4iAfLZu0AOIXVQXYW3HFFBXiJJzt3RsxVHO4J6NoUg.PNG%2Fimage.png&type=a340",answer : "윈터"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fimgnews.naver.net%2Fimage%2F5339%2F2023%2F10%2F13%2F0000275015_001_20231013151806542.jpg&type=a340",answer : "장원영"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMzEyMDFfMjAw%2FMDAxNzAxMzc2NzUxMjM0.nN2hy_xxBWTQ0tAoVmtbtMbKHgUKTF6BhU78TAUpbhEg.N6iRpWk0zkhmp-9pwsBj13FafWJosyv6dlSPFl_jzoUg.JPEG.eternalharuk%2F1701376703853.jpg&type=a340",answer : "스티븐 유"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMzEyMjdfMjMz%2FMDAxNzAzNjA1NTYzMDk0.ZsmFa4tebr7Vp4WMD6lHA7Dg4FsdxQDUuyxpdw8AT3Qg.S39BkPg-cQ66IyiygYlki7BbXSKa78zXmYlmCGkzA-4g.PNG.dlwltjs136%2F%25BD%25BA%25C5%25A9%25B8%25B0%25BC%25A6_2023-12-27_%25BF%25C0%25C0%25FC_12.45.13.png&type=a340",answer : "피카소"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fimgnews.naver.net%2Fimage%2F076%2F2023%2F08%2F16%2F2023081701001141600146781_20230816084702940.jpg&type=a340",answer : "모하메드 살라"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMzEyMTJfODQg%2FMDAxNzAyMzQ2NjYzMTQ2.jdW4SZoLoeJM7NidvkgF2kWBu1_I-XZPxxlY3XEJvNwg.Qd2xRZGq9whP3EZow-WkjIMGL8ALtVYxb7kWgArkrAAg.PNG.zzeom14%2F7.png&type=a340",answer : "웬디"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyNDA3MDZfMzYg%2FMDAxNzIwMjM3NzIxNzcy.CLvENBNntpYLfEt4IDkrDEJ2JrO2toBG-t8QUpo3bPwg.BhPHDdCC7EgL4cwi1Ur5T25zK6XgZXr5uk9AO8KlIIQg.PNG%2F%25BD%25BA%25C5%25A9%25B8%25B0%25BC%25A6_2024-07-03_%25BF%25C0%25C0%25FC_1.37.20.png&type=a340",answer : "침착맨"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMTA3MDlfMTk0%2FMDAxNjI1ODE2MjMxNDEy.SOyCjtt1jbJfl9Snjkd30EC2qvyQVsWQALuQUh-RNlUg.PD_TSBr73AJ_rRPjxUof6z1HErwasQfvbVbbxz4lhiYg.GIF.qmlab4qmk%2F1568448858_i15241602494.gif&type=a340",answer : "괴물쥐"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyNDA2MTNfMTU3%2FMDAxNzE4MjY4MTU0MDM0.e4zJVognMTG8z0bENH8A4AWv4_iYOR5izb6odgmIARcg.FCFchCfNO5U9fNuM14z8tuWfy1Ir8MyiQrfvGR74BKQg.PNG%2F2424.png&type=a340",answer : "페이커"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMjA2MzBfODUg%2FMDAxNjU2NTgzNDA4Mjc3.qnd2JloH4EcANn8P5-2LRurFih2gT2FP6AX8YRfB220g.3xJ3Au7ttzW_8lLSpveqO9cFdAn4unGQQ3hKEkHW4Nwg.PNG.jzzgw81118%2F%25C8%25AD%25B8%25E9_%25C4%25B8%25C3%25B3_2022-06-20_171604.png&type=a340",answer : "김두한"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fimgnews.naver.net%2Fimage%2F5812%2F2024%2F03%2F17%2F0000080953_001_20240317013602925.jpg&type=a340",answer : "한소희"},
+            {src:"https://search.pstatic.net/sunny/?src=https%3A%2F%2Fi.pinimg.com%2F736x%2F07%2Fb3%2F50%2F07b35022effed2c68915363cc51db4d5.jpg&type=a340",answer : "고윤정"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyNDA1MTJfMTkz%2FMDAxNzE1NDg0NDIwOTIw.fz824O-ceAOpboL8jVAi9rfEKM2gEuSzn7o52okK0cEg.qc9noxiLdIrqzvN0HmR9RnCpxk7NB7KR7GJVD0YaAM0g.JPEG%2F%25B4%25D9%25BF%25EE%25B7%25CE%25B5%25E5%25C6%25C4%25C0%25CF%25A3%25DF20240512%25A3%25DF122340.jpg&type=a340",answer:"리즈"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyNDAxMDRfMjIx%2FMDAxNzA0MzM4OTAyMjg4.HOFJEqdH4yiGscuSgIZhbTVS0-zcNBmAvkd6rynK_qkg.aePPR71QwJd1IL6eMx65iMVEt6KWj0whM9B1F31-vrYg.GIF.showkobe08%2F036677e45a462092c42cd52cad6187d0eb6b7444.gif&type=a340",answer:"유나"},
+            {src:"https://search.pstatic.net/sunny/?src=http%3A%2F%2Ffile3.instiz.net%2Fdata%2Fcached_img%2Fupload%2F2022%2F05%2F27%2F18%2F309cc72893cddd00c4b32082a5d7bc83.jpg&type=a340",answer:"아이유"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyNDA1MzBfNzAg%2FMDAxNzE3MDI3NTc2NTEw.ElczbLedyHcioqg9L_OoSapMsaWWzqTXFVlsOFbfFkog.ett76zmr5aQJJWEKOvn7gO4Duq2,dcmRuB7rAWmgXDswg.PNG%2Fzc.png&type=a340",answer:"강동원"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fimgnews.naver.net%2Fimage%2F421%2F2024%2F07%2F24%2F0007684427_004_20240724170413743.jpg&type=a340",answer:"유아인"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fimgnews.naver.net%2Fimage%2F408%2F2023%2F10%2F24%2F0000204579_002_20231024202201478.jpg&type=a340",answer:"지창욱"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyNDA2MTFfMjEw%2FMDAxNzE4MTE3ODQ2ODEy.I4_Qfwl_MCcQwHwZXaCdMAfX3AQnA8FMXWfq3s3oU9Yg.6gKNzduix9o3p2eJuRfM0ZhWqY5q216FOn000T9epVwg.PNG%2Fimage.png&type=a340",answer:"서강준"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fimgnews.naver.net%2Fimage%2F003%2F2024%2F03%2F11%2FNISI20240311_0001498886_web_20240311174819_20240311175418168.jpg&type=a340",answer:"송강"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyNDA3MjBfMTYz%2FMDAxNzIxNDgxOTg0Njcw._ykKb2CF2voounh6ypXIaVADofKAi0x9rJYhfjPXr9gg.ObFRgCnZIIhQNS8AnzerKmfy7nmdBHKZ7uj8l78vY6Mg.PNG%2Fimage.png&type=a340",answer:"이진욱"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fimgnews.naver.net%2Fimage%2F057%2F2024%2F07%2F10%2F0001828887_002_20240710174207228.jpg&type=a340",answer:"이명박"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fimgnews.naver.net%2Fimage%2F5526%2F2024%2F07%2F24%2F0000373739_001_20240724084807230.png&type=a340",answer:"김건희"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fimgnews.naver.net%2Fimage%2F003%2F2023%2F11%2F21%2FNISI20231010_0020085644_web_20231010192701_20231121150309697.jpg&type=a340",answer:"김도영"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyNDA2MDRfMjk4%2FMDAxNzE3NDM4NjY0MTc5.L4VYLjftbIoD0iLWcuuQaW4weDm0GKv7XmPKyxEDLJUg.VxrA0Nb8YpNLAwHNNC-9L55McrXenH0soBzXELp8kTUg.GIF%2FHoneycam_2024EFBC8D05EFBC8D18_17EFBC8D58EFBC8D59EFBCBF20240520EFBCBF200746.gif&type=ofullfill340_600_png",answer:"이주은"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fimgnews.naver.net%2Fimage%2F398%2F2023%2F10%2F30%2F0000072155_001_20231030105701370.png&type=a340",answer:"하지원"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyNDAyMDNfMTQx%2FMDAxNzA2ODkwOTQ1ODI3.IQkDDg_B9MHGdolWbTVkqDn3MSYonwuZve_H7-uoTBsg.hhyEDdCRAr0FipCcNog0GGPH5G3QxRTK6xj7o_MERlsg.JPEG.jinelijah%2F28d6f8c2e3069a440cd5072d2701ac25.jpg&type=a340",answer:"안지현"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fimgnews.naver.net%2Fimage%2F003%2F2023%2F11%2F05%2FNISI20231105_0001403921_web_20231105130912_20231105132008917.jpg&type=a340",answer:"권은비"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyNDA3MDhfMTIx%2FMDAxNzIwNDQ0NDUyNTM2._kkL4XxtV1LBhWAmC2XWb-gk0Fjdu-HbXzpU29RllNcg.r7mlL6L08CXqMaTTqKdxWEQUnQQ6BnoIiEW284WJ_Wog.JPEG%2FimgUrl20240703014713312.jpg&type=a340",answer:"슈화"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMzEyMTZfMTIz%2FMDAxNzAyNjc0MTc4MjQy.wmi8IyU47ebmSd2PC_Yht92-D4dEltwrTPpEY_C2GVkg.MWxNKi5GGbpMpByy3dWVvTfkpADYRVwceZEfa67JR54g.JPEG.ohzzozzo%2FInternet%25A3%25DF20231216%25A3%25DF060206%25A3%25DF10.jpeg&type=a340",answer:"미연"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fimgnews.naver.net%2Fimage%2F312%2F2016%2F08%2F16%2F2016081615564314626-540x810_99_20160816155902.jpg&type=a340",answer:"고창석"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fimgnews.naver.net%2Fimage%2F112%2F2024%2F01%2F16%2F202401161052412191941_20240116112922_01_20240116113003002.jpg&type=a340",answer:"마동석"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fimgnews.naver.net%2Fimage%2F032%2F2008%2F04%2F16%2F20080417.01100123000006.01L.jpg&type=a340",answer:"이봉주"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fimgnews.naver.net%2Fimage%2F003%2F2018%2F04%2F03%2FNISI20180403_0000128668_web_20180403075523_20180403081101900.jpg&type=a340",answer:"우현"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fimgnews.naver.net%2Fimage%2F5181%2F2019%2F12%2F05%2F0001662928_001_20191205233609174.jpg&type=a340",answer:"안내상"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fimgnews.naver.net%2Fimage%2F047%2F2023%2F09%2F13%2F0002406217_002_20230913121204753.jpg&type=a340",answer:"윤계상"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fimgnews.naver.net%2Fimage%2F5838%2F2024%2F02%2F03%2F0000011339_001_20240203080003034.png&type=a340",answer:"베리발"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fimgnews.naver.net%2Fimage%2F213%2F2012%2F09%2F17%2F20120917_1347835820_10606100_1_59_20120917083043.jpg&type=a340",answer:"드록바"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMzA0MDNfNyAg%2FMDAxNjgwNTAyNjA2ODMw.nkwQVXISCnuiVVpf75JFb-UEtfURs5R0I-VOHK-zCzQg.tVLRJwq9BvmrQKV3nyTNgiwj_pjOs-nCD7OJBMBTYmQg.PNG.football_goat%2Fimage.png&type=a340",answer:"호나우지뉴"},
+            {src:"https://search.pstatic.net/sunny/?src=http%3A%2F%2Ffile3.instiz.net%2Fdata%2Ffile3%2F2021%2F03%2F09%2F1%2Fb%2Fc%2F1bc5b37835b1c6626045d5bd987b20d0.jpg&type=a340",answer:"루니"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2F20140319_252%2Figsm939_1395198675950X6n9f_JPEG%2Ftumblr_mc8per1p4r1rq6kano1_500.jpg&type=a340",answer:"체흐"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fcafefiles.naver.net%2F20130422_289%2Fpzals_1366639104393k7zEg_JPEG%2F-1466282543.jpeg&type=a340",answer:"카시야스"},
+            {src:"https://search.pstatic.net/sunny/?src=https%3A%2F%2Fi1.ruliweb.com%2Fimg%2F23%2F08%2F17%2F18a0266861557253e.jpeg&type=a340",answer:"카카"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fimgnews.naver.net%2Fimage%2F5486%2F2024%2F01%2F23%2F0000262905_003_20240123171805641.jpg&type=a340",answer:"베컴"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyNDAyMjVfMjM0%2FMDAxNzA4ODQ3MTQ3NTM0.zKHvPEsE82vdDg8vHgVgqfr8fFyYJBLUa2PySx1OuYsg.3sWNsZFGk3Wa3MhL1vgO-WBtgGAliLq5u9oLjR2mmPwg.PNG%2Fimage.png&type=a340",answer:"안정환"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMzA1MzFfMTUg%2FMDAxNjg1NTIyNTkyODE4.5v6UnAaJMoBut6TauKkA4Br-Pe9ybwO5vv4kFZfUYpIg.IiW_zl54J-adT_DaN0PK17pJlbEO-L-JPe2J4HGAk2Eg.PNG.barbar5152%2F%25BD%25BA%25C5%25A9%25B8%25B0%25BC%25A6_2023-05-31_174255.png&type=a340",answer:"아이린"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMzEyMTFfMTgg%2FMDAxNzAyMjc2NTM0NDUz.YqhPXM40V1vW8d6ypmontytEhLsGrluPsaReWeZJV6wg.JMLre5IDC-Mwtd3rpbBOPzTAkA5-kED-DKQk8LdYFtYg.JPEG.yyr3178%2Foutput_459230905.jpg&type=a340",answer:"김유정"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyNDA3MDhfMjMx%2FMDAxNzIwNDI0MDcyNTgx.ffesi1xpItqGlkyIVkynKGlzxzXP0coA7_Gmo2nE9Kog.KNr64AAmlnP8Vr9-Vx6AGQKw_GtOJv61_y4NPT_d1bYg.JPEG%2FIMG_4569.jpg&type=a340",answer:"김소현"},
+            {src:"https://search.pstatic.net/sunny/?src=http%3A%2F%2Fflash24.co.kr%2Fg4%2Fdata%2Fmw.cheditor%2F2211%2FMMceQX5fJFVHxKqIS.jpg&type=a340",answer:"백지헌"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fimgnews.naver.net%2Fimage%2F477%2F2022%2F12%2F16%2F0000400496_001_20221216190602925.jpg&type=a340",answer:"이채영"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMzA5MDdfMTc5%2FMDAxNjk0MDY1MTcwMDQ3.iqndwGDqkAo4IKC2uGgFfVXo40_-h_sluUVmCp0KcKIg.cmKt4qNbLzS133izM3ltNM17y0z9T0PMW9puqH4yAHAg.JPEG.mssixx%2FIMG_8872.JPG&type=a340",answer:"조유리"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyNDA1MTdfMjMz%2FMDAxNzE1OTIyMTk3MjMy.LHzCA5oGqC6k6o2wiOeB2tIydR4v5a9JNSkaCgPSigkg.1U9ygMnZnY_66TPHeYDuYk3EvYpDBmxdoJ3ZaGHSDGYg.PNG%2Fimage.png&type=a340",answer:"조보아"},
+            {src:"https://search.pstatic.net/sunny/?src=https%3A%2F%2Fi.namu.wiki%2Fi%2F3IGWnKDf8pAvhBE8NVANr20c6AXgXQtlM28i7DfauSlvhDrT5EVcpUHGQcvh-FIKssfQSWK8o9HWXsKU01SvNQ.webp&type=a340",answer:"이주빈"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fimgnews.naver.net%2Fimage%2F382%2F2024%2F04%2F15%2F0001119821_001_20240415173904029.jpg&type=a340",answer:"설인아"},
+            {src:"https://search.pstatic.net/sunny/?src=https%3A%2F%2Fi.namu.wiki%2Fi%2FhiD_ieSrjTN_VMXQR96o8qYWkt7RcNH5k0nTHHUzVxTWu1LHH_3dwHoknsaKStLT-ooqQWfOM_OsczNfJPmP1w.webp&type=a340",answer:"성윤모"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fimgnews.naver.net%2Fimage%2F5585%2F2019%2F03%2F03%2F0000016379_001_20190303214405859.jpg&type=a340",answer:"제프 베이조스"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMzA1MjZfMjEz%2FMDAxNjg1MTA0NDQ0MDky.vG4ZhuJovk4A8edARbbkss95vHwEZPG2YelOuveMTt8g.qrqNeFAIYlE1jcAkNDaf_Y81aNZIFWJgquxNOokVGsYg.PNG.rlarudals211%2Fimage.png&type=a340",answer:"일론 머스크"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2F20130618_250%2Fhills50_1371516900628UQ6w7_JPEG%2F2013-06-18_09%253B38%253B56.jpg&type=a340",answer:"마크 주커버그"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyNDA3MDNfNDcg%2FMDAxNzE5OTgwMzQyNDU2.7TpGTySTS0TX-WOUzVv1B_4hVMmrfUFihB9PaLd5o3Ig.4eeStxys5-oSsvxAEFihnzX8KaFkd4T3UxZqTht0DvAg.PNG%2Fimage.png&type=a340",answer:"젠슨 황"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fcafefiles.naver.net%2FMjAxOTA2MTFfMTkz%2FMDAxNTYwMjA5MjgyMjEy.cRZwmaRJwVRoRleARbSUcfiidOJRPI_EaEhohIN2vCUg.qc2CgyYqvzNsz_wwcdAsfkm6Y_1yAPCOm6kvgSZPs6gg.JPEG%2FBB5BE48B-FE86-4325-84EC-AC3B7AE15AE4.jpeg&type=a340",answer:"리사수"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyNDA3MDNfMTcg%2FMDAxNzE5OTc5NTA2ODE5.VXm1clXX6PmDcbMU4c8F9H-bHISSkW_G7WhFU2_efpwg.bEhuVDhyNvLnsDV4S33sB5bCx1oiBTH3TB7ZDjTI7GUg.JPEG%2F%25C0%25CC%25B0%25C7%25C8%25F13.jpg&type=a340",answer:"이건희"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fimgnews.naver.net%2Fimage%2F5692%2F2024%2F07%2F28%2F0000006070_001_20240729221609830.jpg&type=a340",answer:"이재용"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMzA1MjRfMTM2%2FMDAxNjg0OTE5NDI0MzU4.0MOk-aNpHT170XMyPhVFAZeAvQTs3nwFn2lb10DJuLsg.fsKeD7CRFkFvMCrBLIPPmoGOO9G4ccxchxe2V_JMktog.JPEG.kkk5941998%2F1684919421389.jpg&type=a340",answer:"이부진"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fimgnews.naver.net%2Fimage%2F5140%2F2023%2F04%2F17%2F0000053694_001_20240319010251381.jpeg&type=a340",answer:"구광모"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyNDA2MThfMjM0%2FMDAxNzE4Njk4NzMwMjM3.pFS1S53LuGrygtm9tRvww22fBdzYtZKPAPI5pARbvHcg.8FI5IbHI9QTLatc3aaifGOLVqA_yq0GJknAkRSkrHW0g.JPEG%2F%25B0%25AD%25C8%25A3%25B5%25BF%25B8%25D3%25B8%25AE1.jpeg&type=a340",answer:"강호동"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fimgnews.naver.net%2Fimage%2F5820%2F2024%2F03%2F08%2F0000076133_001_20240308101806015.png&type=a340",answer:"정용진"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyNDA3MDNfMzUg%2FMDAxNzE5OTY3MzE3MzYw.ckct55e7A54KbP4H5D3QF-1WDRGXoAEickx7LZQ-usYg.wrr5c0iPA_xOvVridtlz3ExFvEE5B-a5_1Bl7mMen98g.JPEG%2FIMG_3716.JPG&type=a340",answer:"앤디 워홀"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyNDAxMTNfMTk1%2FMDAxNzA1MTAxODExOTAw.h6grWtq1bqBwUb1xoiYuRq2lNq9uBYVWNy4AeLE1iaYg.ZJOJRveOgvM_yq-T735evGdbn9MecEI61VRv9bHpMLQg.JPEG.zeenokim%2F%25B4%25DC%25B1%25BA.jpg&type=a340",answer:"단군"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fimgnews.naver.net%2Fimage%2F001%2F2024%2F07%2F02%2FPYH2024070201130004200_P4_20240702075549390.jpg&type=a340",answer:"김정은"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fimgnews.naver.net%2Fimage%2F448%2F2024%2F08%2F15%2F2024081590108_0_20240815173009800.jpg&type=a340",answer:"푸틴"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fimgnews.naver.net%2Fimage%2F023%2F2023%2F07%2F04%2F0003773529_001_20230704105901142.jpg&type=a340",answer:"젤렌스키"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fimgnews.naver.net%2Fimage%2F056%2F2024%2F08%2F16%2F0011781826_001_20240816040616420.jpg&type=a340",answer:"트럼프"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fimgnews.naver.net%2Fimage%2F030%2F2022%2F05%2F19%2F0003017904_001_20220519153301139.jpg&type=a340", answer:"차준섭"},
+            {src:"https://search.pstatic.net/sunny/?src=https%3A%2F%2Fi.namu.wiki%2Fi%2FgvyqsyyuohV1T4KHJds8eRVQNvrVxEPOtRncouhSkMxY1edavrjN8PC-aaGjs38pq7Pk1-ghU_Ezh8GPLyMvAA.webp&type=a340", answer:"티커"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyNDAxMjJfNTcg%2FMDAxNzA1OTE3ODk3ODI3.u5_wBXfR5yVApH_509tkX9e3u1i5m-2N25i1EhDQubwg.sO7-yrCHhKq4NAPduIQHk-cAzWB2aboOnvDIMXcdVt4g.JPEG.kmysu%2F1705917897630.jpeg&type=a340", answer:"람보"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyNDAxMTVfMTUy%2FMDAxNzA1MzI5NDAzMjIx.i74regk7HMcaqEyvfQzch9K6n39irpAohIMYJugVzEcg.4_CBwSbSyOXGMBgdjdRNtVA7PZFi3tCrYfljDwPkeM8g.JPEG.ujeong2851%2FIMG_0166.jpg&type=a340", answer:"해리포터"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2F20140406_177%2Fazrael000_1396761928305zu18O_JPEG%2FEmma_Watson_-_%2527Noah%2527_London_premiere_%2528March_31%2529.jpg&type=a340", answer:"엠마 왓슨"},
+            {src:"https://search.pstatic.net/sunny/?src=http%3A%2F%2Ffile3.instiz.net%2Fdata%2Ffile3%2F2021%2F07%2F15%2F3%2F1%2Fa%2F31afaff7680567d2eae7c83979bf9449.jpg&type=a340", answer:"엠마 스톤"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fpost.phinf.naver.net%2FMjAxODA3MDNfMzkg%2FMDAxNTMwNjEwMzI3NDkw.7__XCCM8EUmmCYI7AX-PwnD6KMZcxYOLlONbI7Nsg6Qg.li4A50SH8Y0W5C24GqKsF0MzVwwsrhgGNw3F98en0X8g.JPEG%2FIflpDfK_VOVz91MUh21SzMxoic54.jpg&type=a340", answer:"앤 해서웨이"},
+            {src:"https://search.pstatic.net/common/?src=https%3A%2F%2Fpbs.twimg.com%2Fprofile_images%2F603269306026106880%2F42CwEF4n.jpg&type=a340", answer:"톰 크루즈"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2Fdata41%2F2009%2F1%2F9%2F170%2F----_ryderalley.jpg&type=a340", answer:"크리스틴 스튜어트"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyNDA3MDFfMTIw%2FMDAxNzE5ODQwNDU1ODcx.cZwBDKfkXp48hY_dWkShxK0hEfjXiEMlzBgfej-a-Gwg.AvtOjOq-AKnHreCSyA1-NERlIT8JJszx3yd0CviUkhog.PNG%2F06266qqqqcapture-20240701-220236.png&type=a340", answer:"제니"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyNDA2MjdfMTgx%2FMDAxNzE5NDM5NTg1NjQ4._xPtDBQUz9QUC9RA1vk0gx3TBOsiJ9ccX-uApe1gMAgg.P5Kll7dHv-J3N9FkbdGBAeZF2xqxSlctzOitqcQlJNUg.JPEG%2FInternet%25A3%25DF20240627%25A3%25DF070548%25A3%25DF5.jpeg&type=a340", answer:"지수"},
+            {src:"https://search.pstatic.net/sunny/?src=http%3A%2F%2Ffile3.instiz.net%2Fdata%2Fcached_img%2Fupload%2F2019%2F12%2F29%2F21%2Fbd2ca0461f6f06b25395b058a6a6ea75.jpg&type=a340", answer:"수지"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyNDA3MTVfNDMg%2FMDAxNzIxMDE5NTU0NDY2.eT2iv5QqodhBCQ01n367AZwYDqXbRktIGj3gsrQrf88g.JKCWb42x6AD_ikVqXb0G5cke2FqHrldxyGBwaAdBL0Ug.JPEG%2F%25BC%25D2%25B3%25E0%25BD%25C3%25B4%25EB_%25C0%25B1%25BE%25C6_%25BA%25F4%25B5%25F92-2.jpg&type=a340", answer:"윤아"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fimgnews.naver.net%2Fimage%2F609%2F2023%2F07%2F19%2F202307191934201510_1_20230719193502401.jpg&type=a340", answer:"이광수"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fimgnews.naver.net%2Fimage%2F5348%2F2023%2F08%2F09%2F1691541446_20230720111101-614_20230809094405160.jpg&type=a340",answer:"전소미"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fimgnews.naver.net%2Fimage%2F609%2F2024%2F05%2F30%2F202405301516011110_101_20240530194515333.jpg&type=a340",answer:"원빈"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMzA3MTZfMjcw%2FMDAxNjg5NDUyODk2MDI4.ZPEFJzCrNzPDRF6yActdfkrlqIl5qSH2O4Sdp0WxrGQg.54CIU35ouL8rHzaeboFeRhdFxzH37Lac_dp-uXOHOF8g.JPEG.korpott%2FFB_IMG_1689423564466.jpg&type=a340",answer:"징키스칸"},
+            {src:"https://search.pstatic.net/sunny/?src=https%3A%2F%2Fplay-lh.googleusercontent.com%2FmQoY82KOXiXjx7Jb6ZeWkP2O39l1HXoUcJM-NZXv_lKWfdTIJOTUi31SeplDpMCjPw&type=a340",answer:"파라오"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMTEyMjhfNzcg%2FMDAxNjQwNjgxNDE0Mjk1.BDO-l-nHTAmTDKdVu3q7XeIjR1BmsssHusGDWUPTXNQg.xHGAxSUdkZGhpnD2mIBVGItmnosgVOmBael6c4mZ-icg.JPEG.dodokimkkk%2FIMG_0785.JPG&type=a340",answer:"콜럼버스"},
+            {src:"https://search.pstatic.net/common/?src=https%3A%2F%2Fdbscthumb-phinf.pstatic.net%2F3329_000_91%2F20141110065822825_8QAPZUA2E.jpg%2F2011021816333573.jpg%3Ftype%3Dm2000_2000_fst_n&type=a340",answer:"마젤란"},
+            {src:"https://search.pstatic.net/sunny/?src=https%3A%2F%2Fimg.ridicdn.net%2Fcover%2F1959000046%2Fxxlarge&type=a340",answer:"테슬라"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2F20140410_82%2Fpurejit_1397086285992WVyaa_PNG%2FScreenshot_2014-04-10-08-29-57_edit.png&type=a340",answer:"에디슨"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyNDA4MDNfMTUg%2FMDAxNzIyNjczODkyMzQy.I8g-B5ij1TchOTNAA2S1MStalNzI4RKrOJmV__0aQw8g.r6OgrB-XCYOMLaGl7q_kKjw2XlYeN9fywsPDSEC-aIIg.PNG%2Fimage.png&type=a340",answer:"정약용"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyNDA2MTVfNTQg%2FMDAxNzE4NDA5Mzk4Mjcx.pXoJCeaDPI-n2HtXjITKRNnE4GxcPHjIyaaasNNT9_Ug.gsU_Fmsv-p4P34FoqCtWKo3hdZ4nBTXwIcKqipidHVYg.JPEG%2FIMG_0496.JPG&type=a340",answer:"곽튜브"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMzA1MjVfMjQ5%2FMDAxNjg0OTc0MDM2NzY3.mJk8QV7zvlwP82EfoiTl39Wr9pnv9d1f-1gi75_Re-gg.1DfxCv_n8EvrfclHZVih7A2zJLAlHjem24Sfx0srfpcg.JPEG.call110926%2FInternet%25A3%25DF20230525%25A3%25DF091914%25A3%25DF10.jpeg&type=a340",answer:"빠니보틀"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyNDA1MDdfMTA1%2FMDAxNzE1MDI2MzMxOTM3.4_xK_oGNwfcx-BTIwzyrgCqOlEp50sqVCUcrg2KKmbQg.Puvb0jPQ4zt--YIajddGIndSdSr_aDIhUEwbSGKiQbcg.JPEG%2F3.jpg&type=a340",answer:"방시혁"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMjExMDlfNTcg%2FMDAxNjY3OTQ1MjYzMDAx.-Y59736m1GoFVod1ju1nfOWp019MIO2Ls4_yALkTvwIg.Cq-NMiCjDWfq-LFseTBV_8pRgckDMhmbUm0MvjbM7XUg.JPEG.pkeunyoo%2FScreenshot%25A3%25DF20221109%25A3%25AD070527%25A3%25DFInstagram.jpg&type=a340",answer:"과즙세연"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMjEyMTZfMjIg%2FMDAxNjcxMTU5MTcyODMx.baTAKb48KYIFjFOYV7olneimFUQBMnOJlEPxWrSs7Ocg.c_eEMhPa5bhYiewkkrp76Mv9hy0SDIH05RKwske5aWUg.JPEG.call110926%2Fimg%25A3%25DF20221216111354%25A3%25DF5905bb51.jpg&type=a340",answer:"철구"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyNDA3MDhfMTI3%2FMDAxNzIwNDM3MzMyMjMy.RbG20R1Ev11P6wcnXnEdI8BiftmQtJ9O1yp0thch4mcg.qoAzNYC96Xxt0JnMu9duz1q0vawbQ3QRvBKxQ13MFt4g.PNG%2F20240708_201417.png&type=a340",answer:"감스트"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fimgnews.naver.net%2Fimage%2F408%2F2023%2F09%2F07%2F0000200128_013_20230907115702159.gif&type=a340",answer:"이제훈"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fimgnews.naver.net%2Fimage%2F410%2F2017%2F11%2F28%2F0000421878_001_20171128125535532.jpg&type=a340",answer:"최홍만"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyNDA2MTJfNzAg%2FMDAxNzE4MTg3NjQ2ODU0.kibMqTlTKWlFOFjQs-GtUrhL2cD-RdUyHy7f4vFpaiwg.LjjD-l9Ic0TzKVNDWqULxkI0RMyVZiIUpsG2D8FFvb4g.PNG%2F%25C0%25AF%25C0%25E7%25BC%25AE%25BA%25F4%25B5%25F9_%25BA%25F4%25B5%25F9_%25BE%25F3%25B8%25B6%25B4%25CF_%25C0%25AF%25C0%25E7%25BC%25AE%25BA%25CE%25B5%25BF%25BB%25EA_%25B0%25AD%25B3%25B2%25BA%25F4%25B5%25F9%25B8%25C5%25B8%25C5_%25BA%25F4%25B5%25F9%25B8%25C5%25B8%25C5_%25B0%25AD%25B3%25B2%25BA%25CE%25B5%25BF%25BB%25EA_%25BA%25CE%25B5%25BF%25BB%25EA%25C7%25C1%25B7%25BB%25B5%25E5_23_%25B0%25AD%25B3%25B2%25BB%25E7%25BF%25C1%25B8%25C5%25B8%25C5_%25BB%25E7%25BF%25C1%25B8%25C5%25B8%25C5.PNG&type=a340",answer:"유재석"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fimgnews.naver.net%2Fimage%2F421%2F2023%2F12%2F30%2F0007262775_001_20231230202609344.jpg&type=a340",answer:"신동엽"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2F20100312_13%2Fentail_126839749927077yNK_jpg%2F%25B9%25D9%25B6%25F7.wish.2009.dvdrip.xvid.avi_002992022_entail.jpg&type=l340_165",answer:"정우"},
+            {src:"https://search.pstatic.net/common/?src=http%3A%2F%2Fimgnews.naver.net%2Fimage%2F042%2F2003%2F10%2F15%2Franny200310151709540.jpg&type=a340",answer:"노무현"},
+        ];
+
+        // 현재 이미지와 점수 변수
+        let score = 0;
+        let attempts = 30; // 기회 수
+        let usedIndices = []; // 사용된 인덱스를 저장할 배열
+        let currentImageIndex;
+
+        // 랜덤 인덱스 생성 함수 (중복되지 않도록)
+        function getRandomIndex() {
+            if (usedIndices.length >= images.length) {
+                return null; // 모든 이미지를 사용한 경우
+            }
+            let index;
+            do {
+                index = Math.floor(Math.random() * images.length);
+            } while (usedIndices.includes(index));
+            usedIndices.push(index);
+            return index;
+        }
+
+        // 정답 확인 및 다음 이미지로 변경하는 함수
+        function checkAnswer() {
+            // 입력한 값 가져오기
+            const userGuess = $("#guess").val().trim();
+            const correctAnswer = images[currentImageIndex].answer;
+
+            // 정답과 비교
+            if (userGuess === correctAnswer) {
+                $("#result").text("정답입니다!").css("color", "green");
+                score++; // 점수 1점 추가
+            } else {
+                alert(`풉ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ틀림ㅋㅋㅋㅋㅋㅋㅋㅋ '${correctAnswer}'인데..ㅋ.`);
+                score--; // 점수 1점 감소
+            }
+
+            // 점수 및 기회 업데이트
+            $("#score").text(score);
+            attempts--;
+            $("#attempts").text(attempts);
+
+            // 게임 종료 여부 확인
+            if (attempts <= 0) {
+                $("#result").text("게임 종료! 모든 기회를 사용했습니다.").css("color", "blue");
+                $("#btn").prop("disabled", true);
+                return;
+            }
+
+            // 다음 랜덤 이미지로 변경
+            currentImageIndex = getRandomIndex();
+            if (currentImageIndex !== null) {
+                $("#image").attr("src", images[currentImageIndex].src);
+                $("#guess").val(""); // 입력창 초기화
+                $("#result").text(""); // 결과 메시지 초기화
+            } else {
+                $("#result").text("모든 문제를 맞추셨습니다!").css("color", "blue");
+                $("#btn").prop("disabled", true);
+            }
+        }
+
+        // 버튼 클릭 시
+        $("#btn").on("click", () => {
+            checkAnswer();
+        });
+
+        // Enter 키 누를 시
+        $("#guess").on("keypress", (event) => {
+            if (event.which === 13) { // 13은 Enter 키의 코드입니다.
+                checkAnswer();
+            }
+        });
+
+        // 초기 이미지 설정
+        $(document).ready(() => {
+            currentImageIndex = getRandomIndex();
+            $("#image").attr("src", images[currentImageIndex].src);
+        });
+    </script>
+</body>
+</html>

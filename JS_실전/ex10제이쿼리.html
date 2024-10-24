@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="jquery-3.7.1.min.js"></script>
+</head>
+<body>
+    <h1 id="txt">text</h1>
+    <script>
+        // JQuery : JAVASCRIPT를 모든 브라우저에서 동작, 코드를 매우 짧게 작성 가능
+        // 기본 동작원리는 JAVASCRIPT와 똑같다.
+        // 1) 요소접근 = $("선택자")
+        let js = document.getElementById("txt");
+        let jq = $("#txt");
+
+
+        // 2) 컨텐츠접근 
+        let js_txt = document.getElementById("txt").innerHTML;
+        let jq_txt = $("#txt").html();
+
+        // 3) 컨텐츠 수정
+        // *객체기반의 코딩을 할때 반드시 키값과 벨류값에 집중 -> 변경 (대입)
+        // *함수기반의 코딩을 할때 반드시 함수와 매개변수에 집중 -> 변경(매개변수)
+        document.getElementById("txt").innerHTML = "변경";
+        $("#txt").html("변경");
+
+        // 4) 스타일 제어
+        document.getElementById("txt").style.color = "red";
+        document.getElementById("txt").style.fontSize = "100px";
+        document.getElementById("txt").style.cssText = "color:red","font-size : 100px";
+        $("#txt").css("color","red");
+        $("#txt").css("font-size","100px");
+        // 값을 한번에 전달하기 위해서 선택지 2가지 배열 vs 객체 
+        // 객체를 더 많이 사용 -> 가리키는 데이터가 다른경우가 훨씬 많기 때문에 
+        // 데이터 분석 -> 배열 형태의 데이터 / 데이터 전송 -> 객체 형태의 데이터
+        // 객체형태로 작성할때는 키값은 문자로 적지 않는다 -> 하이픈을 작성하지 않는다 
+        $("#txt").css({
+            color: "red",
+            fontSize: "100px", 
+        })
+    </script>
+</body>
+</html>

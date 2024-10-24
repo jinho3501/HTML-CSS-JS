@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>박스오피스 순위</h1>
+    <span id="date"></span><br>
+    날짜 입력 : <input type="text" id="txt" name="day">
+    <button id="btn">영화정보요청하기</button>
+    <ol id="content">
+
+    </ol>
+    <script>
+        let today = new Date();     
+        let year = today.getFullYear(); // 년도
+        let month = today.getMonth() + 1;  // 월
+        let date = today.getDate();  // 날짜
+        let formattedDate = year + '/' + (month < 10 ? '0' + month : month) + '/' + (date < 10 ? '0' + date : date);
+        
+        document.getElementById("date").textContent = "오늘 날짜 : " + formattedDate;
+        /*
+        동기통신 : 통신할때, 데이터를 주고받는다 - 양이많고,화면전체가 새로고침, 페이지의 이동 
+                - 데이터가 다 넘어오지 않았다면 로딩이 발생 -> 다른 작업을 동시에 불가능
+        비동기통신 :  데이터를 특정 부분만 주고받는다 - 양이적고, 화면 일부만 새로고침
+                - 코딩의 순서가 매우 중요 -> 컴퓨터 스스로가 빠르게 끝나는 임무를 먼저 처리 
+                * AJAX -> Jquery,fetch,axios -> fetch(js안에 존재하는 기본내장 기능) 
+        */
+        const reqData= async()=>{
+            let input = document.getElementById("txt")
+            let txt1 = input.value
+            console.log(txt1)
+            let url =`https://kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json?key=31c3ff528f51caa86d5f5eb0ccddfc32&targetDt=${txt1}`
+            let response = await fetch(url);
+           // console.log("fetch로 요청한 데이터:",response);
+            // ★ 비동기 작업시 -> 반드시 실행순서 고려 -> 업무의 효율성을 위해서
+            // ★ 반드시 같이 작성하는 함수 -> async , await
+            let data = await response.json();
+            //console.log("변형 데이터:",data);
+            let arr =data.boxOfficeResult.dailyBoxOfficeList;
+            let ol = document.getElementById("content");
+            ol.innerHTML = "";
+            for(let i=0;i<arr.length;i++){
+                console.log(arr[i].movieNm);
+                let li = document.createElement("li");
+                let name = document.createTextNode(arr[i].movieNm);
+                li.appendChild(name);
+                ol.appendChild(li);
+            }
+            
+        }
+
+        // 2번째 fetct를 한줄로 작성 -> async , await가 포함 
+        const reqData2 =()=>{
+         let url ="https://kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json?key=31c3ff528f51caa86d5f5eb0ccddfc32&targetDt=20240825"   
+            fetch(url)
+            .then((response)=>response.json())
+            .then((data)=>makeLi(data)); // 콜백 함수 (함수in함수)
+
+        }
+        const makeLi = (data)=>{
+            let arr = data.boxOfficeResult.dailyBoxOfficeList;
+            for(let i=0;i<arr.length;i++){
+                console.log(arr[i].movieNm);
+                let li = document.createElement("li");
+                let name = document.createTextNode(arr[i].movieNm);
+                li.appendChild(name);
+                let ol = document.getElementById("content");
+                ol.appendChild(li);
+            
+        }
+    }
+
+        document.getElementById("btn").addEventListener("click",reqData)
+    </script>
+</body>
+</html>

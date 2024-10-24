@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <input type="text" id="txt">
+    <button id="btn">추가하기</button>
+    <ul id="content">
+    </ul>
+    
+    <script>
+        // 1. 버튼 누르기 
+        const makeLi = ()=>{
+            let li = document.createElement("li");
+            //input 안에 있는 값을 활용
+            let input = document.getElementById("txt")
+            let txt1 = input.value
+            let text = document.createTextNode(`${txt1}`);
+
+            // 삭제 
+            let button = document.createElement("button");
+            //삭제 버튼 안에 넣을 텍스트 노드 생성
+            let button_text = document.createTextNode("삭제하기")
+            //체크박스 
+            let checkbox = document.createElement("input");
+            checkbox.type = "checkbox";
+            //체크 박스 이벤트 추가
+            checkbox.addEventListener("click",()=>{
+                //체크 박스가 체크가 되면 -> 취소선
+                // 아니면 -> 원래대로 돌려라
+                if (checkbox.checked){
+                li.style.textDecoration = "line-through";
+                }
+                else 
+                li.style.textDecoration = "none";
+            })
+            button.appendChild(button_text);
+            //버튼의 삭제하기 기능 연결
+            button.addEventListener("click",()=>{
+                li.remove();
+            })
+
+            // 내용 초기화 
+
+
+            // 미입력시 알림 처리
+
+
+            li.appendChild(checkbox);
+            li.appendChild(text);
+            li.appendChild(button);
+
+            let content = document.getElementById("content")
+            // 1) 사용자가 input창에 데이터를 미 입력시 alert를 사용해서 알림
+            if (input.value == ""){
+                alert("마!! 정신채리라~안적었다");    
+            }
+            else{
+                content.appendChild(li);
+                input.value=""
+            }
+            
+            
+            
+        }
+        document.getElementById("btn").addEventListener("click",makeLi);
+
+        document.getElementById("txt").addEventListener("keydown", (event) => {
+    if (event.keyCode == "13") {
+        makeLi();
+    }
+});
+
+    </script>
+</body>
+</html>

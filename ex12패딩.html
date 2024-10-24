@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+    <style>
+    /*
+         padding -> 테두리와 컨텐츠 사이, 안쪽 여백 증가 
+        *사용 방법 margin과 동일 / auto만 없다
+        *전체 보이는 영역의 크기가 같이 증가
+        *사용처 : 영역안에 텍스트를 작성할때, 텍스트를 안쪽으로 밀어 넣어서 보기 편하게 작성
+        *box-sizing : 기본값( content-box) : 여백 + 컨텐츠 + 테두리 -> 부피증가
+        *border-box : 여백 + 컨텐츠 + 테두리 -> 부피를 유지하기 위해서 컨텐츠 크기를 줄여버린다.
+
+    */
+    div{
+        background-color: yellow;
+        width: 200px;
+        height: 200px;
+        /* padding: 50px;
+        box-sizing: border-box; */
+        border: 1px solid black;
+        border-radius: 5%;
+        
+    }
+    </style>
+<body>
+    <div>안녕하세요</div>
+</body>
+</html>

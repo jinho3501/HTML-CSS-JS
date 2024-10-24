@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1 id="txt">BEFORE</h1>
+    <button onclick="changeText()">텍스트 변경버튼!</button>
+    <button id="btn">변경</button>
+    <script>
+        //1. 텍스트를 변경하는 함수를 제작
+        const changeText = ()=>{
+            document.getElementById("txt").innerText = "AFTER"
+
+        }
+        //2. 버튼과 함수를 연결 
+        document.getElementById("btn").addEventListener("click",changeText)
+        //3. 올바르게 동작하는지 검증
+    </script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        h1{
+            display: none;
+        }
+        span:hover + h1{
+            display: block;
+        }
+        span>h1:active{
+            color: green;
+        }
+    </style>
+</head>
+<body>
+    <!--
+        Display 크게 2가지 영역
+        - block : 태그가 한줄 전체를 차지한다 -> 자동으로 줄 바꿈
+        - inline : 작성된 컨텐츠 만큼만 공간을 차지한다 -> 자동으로 줄바꿈 
+        *block요소는 가로,세로 크기를 지정 / inline 요소는 크기 변경이 불가능
+        - none : 화면에서 안보이게 속성을 제어 * 태그가 삭제 되는건 아니다. 
+        -->
+    <span>1번</span>
+    <h1>1-1번</h1>
+    <span>2번</span>
+    <h1>2-1번</h1>
+</body>
+</html>

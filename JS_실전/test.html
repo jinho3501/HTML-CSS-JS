@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="color" style="background-color: red; width: 500px; height: 200px;"></div><br>
+    <button id="colorButton">색 변경</button>
+    <script>
+        const colors = ["red","orange", "yellow", "green", "blue", "indigo", "purple"];
+        let currentIndex = 0;
+
+        // 버튼 클릭 시 색상 변경
+        document.getElementById("colorButton").addEventListener("click", () => {
+            document.getElementById("color").style.backgroundColor = colors[currentIndex];
+            currentIndex = (currentIndex + 1) % colors.length;
+        });
+    </script>
+</body>
+</html>

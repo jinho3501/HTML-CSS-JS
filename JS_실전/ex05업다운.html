@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <p id="number">0</p>
+    <button id="plus">+</button>
+    <button id="minus">-</button>
+    <script>
+        let num = document.getElementById("number");
+        const p = ()=>{
+            num.innerText = Number(num.innerText)+1
+            
+        }
+        const m = ()=>{
+            num.innerText = Number(num.innerText)-1
+            if (num.innerText < 0) {
+                num.innerText=0
+            }
+        }
+        document.getElementById("plus").addEventListener("click",p)
+        document.getElementById("minus").addEventListener("click",m)
+        
+    </script>
+</body>
+</html>

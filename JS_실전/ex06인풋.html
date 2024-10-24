@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <input type="text" name="id" id="text">
+    <button id="btn">output</button>
+    <script>
+        const print = ()=>{
+            // innerHTML, innerText => 컨텐츠를 수집하는 키 
+            // input 태그는 컨텐츠가 존재하지 않는다. -> value에 저장한다.
+            // input 태그에서 가장 중요한 속성은 -> ★ name , value 중요 ★
+            let data2 = document.getElementById("text").value;
+            alert(data2);
+        }
+        document.getElementById("btn").addEventListener("click",print);
+    </script>
+</body>
+</html>

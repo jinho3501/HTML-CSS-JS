@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        /* 
+            선택자 -> 내가원하는 특정 태그를 지시하는 방법
+            1) 전체 선택자: "*"를 활용해서 모든 태그에게 적용할때 사용
+            2) 태그 선택자: "태그이름"을 활용해서 특정 태그에게 적용할때 사용 
+            3) 클래스 선택자 : "."을 활용해서 태그들에게 이름을 부여할때 사용 * 중복가능
+            4) 아이디 선택자 : "#"을 활용해서 특정 태그에게 고유한 이름을 부여할때 사용 *중복불가능
+                - 클래스는 CSS디자인에서 많이 선택되는 선택자
+                - 아이디는 JS기능을 담당할때 많이 사용되는 선택자 / 디자인에서는 영역을 설정할때 사용
+            5) 계층선택자 : 태그의 포함관계를 이용하여 선택자를 선택
+                - 자식선택자 : ">"를 통해서 포함하고 있는 바로 밑에 태그를 지시하는 방법
+                - 형제선택자 : 서로 포함하고 있지는 않지만 같은 부모를 가진 태그들을 형제
+            # 선택자는 반드시 마지막에 작성되어있는게 목적지 -> 앞에 있는 경로는 내가 자유롭게 작성
+        */
+        *{
+            color: red;
+        }
+        p{
+            color: yellow;
+        }
+        .text{
+            color: green;
+        }
+        #text{
+            color: blue;
+        }
+        div>h2{
+            color: gray;
+        }
+        div>h3{
+            color: skyblue;
+        }
+        h3 + h3{
+            color: brown;
+        }
+        #h1text:active{
+            color: green;
+        }
+        #h1text:hover{
+            color: pink;
+        }
+    </style>
+</head>
+<body>
+    <p id="text">텍스트부분</p>
+    <p class="text">텍스트부분</p>
+    <p>텍스트부분</p>
+    <h1>텍스트부분</h1>
+    <h1 class="text">텍스트부분</h1>
+    <h1>텍스트부분</h1>
+    <div>
+        <h2>h2태그 텍스트</h2>
+        <h3>h3태그 텍스트</h3>
+        <h3>h3태그 텍스트</h3>
+    </div>
+    <h1 id="h1text">반응 선택자</h1>
+</body>
+</html>

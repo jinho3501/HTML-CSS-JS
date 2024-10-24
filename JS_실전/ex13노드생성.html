@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="content"></div>
+    <script>
+        
+        
+        
+        // 노드 생성 
+        // 태그 , 컨텐츠 , 속성 생성 - 동적으로 요소를 생성, 삭제
+        // 1) 단순 텍스트를 포함한 태그 생성
+        // 프로세스 : 1) span태그 생성 2) 태그안에 들어갈 컨텐츠 작성 3) span + 컨텐츠 4) 생성된 태그를 div안에 넣기
+        // 태그 생성 
+        let span = document.createElement("span"); // <span></span>
+        // 컨텐츠 생성
+        let text = document.createTextNode("생성된 텍스트"); // "생성된 텍스트"
+        // 태그 노드 안에 자식으로 컨텐츠 노드 연결
+        span.appendChild(text);
+        // 화면상에 보이기 위해서 div태그안에 자식으로 " 생성된 " span 태그를 넣어주기
+        let div = document.getElementById("content");
+        div.appendChild(span);
+
+        // 2) 속성이 포함된 태그 생성 (img, a .. )
+        let img = document.createElement("img");
+        // scr속성 생성 방법 2가지 ( 1번쨰는 속성노드를 생성해서 연결 / 2번쨰는 속성 키값을 활용)
+        // let src = document.createAttribute("src");
+        // 속성 값을 넣기
+        // src.value = "./go.jfif";
+        // 태그에 속성 추가하기
+        // 속성에 관련된 함수 setAttributeNode vs setAttribute 
+        // setAttributeNode -> 태그와 속성을 각각 생성한 후, 연결할  때 사용
+        // setAttribute -> 태그 안에 이미 지정된 속성을 수정할때 사용 
+        // img.setAttributeNode(src);
+
+        // 속성을 쉽게 넣는 방법
+        img.src = "./go.jfif";
+        // div영역 안 img 태그 추가하기 
+        div.appendChild(img);
+        let h1 = document.createElement("h1");
+        let text1 = document.createTextNode("고윤정");
+        h1.appendChild(text1);
+        div.appendChild(h1);
+        //요소 삭제 
+        // img.remove()
+
+        // 요소를 동적으로 생성할때 키 포인트
+        // 1) 순서를 기억
+        // 요소(태그)를 생성
+        // 컨테츠 or 속성을 생성
+        // 만들어진 태그와 컨테츠 or 속서을 연결 * 컨텐츠를 넣을 때는 자식으로 넣고 , 속성은 자식이 아니다!
+        // 만들어진 완성본을 화면에 보여지기 위해서 HTML에 작성된 태그와 연결 
+    </script>
+</body>
+</html>
